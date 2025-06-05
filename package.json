@@ -1,0 +1,32 @@
+{
+   "name": "yeetstack",
+   "version": "0.0.1",
+   "description": "Yeet Notation - ergonomic monadic control flow for javascript.",
+   "module": "index.ts",
+   "type": "module",
+   "main": "./dist/index.js",
+   "types": "./dist/index.d.ts",
+   "files": ["dist"],
+   "license": "MIT",
+   "author": "Jim Bridger",
+   "exports": {
+      ".": {
+         "import": "./dist/index.js",
+         "types": "./dist/index.d.ts"
+      }
+   },
+   "scripts": {
+      "build": "bun build index.ts --outdir dist --format esm && tsc --emitDeclarationOnly",
+      "dev": "bun --watch index.ts",
+      "demo": "bun --watch demo.ts",
+      "test": "bun test",
+      "test:watch": "bun test --watch",
+      "prepublishOnly": "bun run build"
+   },
+   "devDependencies": {
+      "@types/bun": "latest"
+   },
+   "peerDependencies": {
+      "typescript": "^5"
+   }
+}

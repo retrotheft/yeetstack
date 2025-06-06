@@ -74,7 +74,7 @@ The generator and associated runner give you complete control flow safety no mat
 But even with that, consider the case where your workflow doesn't need to store every variable, e.g. a CSS parser:
 
 ```ts
-const name = yield eat("PROPERTY_NAME")
+const name = yield eat("PROPERTY")
 yield eat(":")
 const value = yield eat('VALUE')
 yield eat(";")
@@ -85,13 +85,12 @@ return { name, value }
 I didn't like that the `yield`s weren't all lined up. So I added the yeetstack so that I could write:
 
 ```ts
-// yeet has been renamed to parser
-yield parser.prop.eat("PROPERTY")
-yield parser.eat(":")
-yield parser.value.eat('VALUE')
-yield parser.eat(";")
+yield yeet.prop.eat("PROPERTY")
+yield yeet.eat(":")
+yield yeet.value.eat('VALUE')
+yield yeet.eat(";")
 
-return ...yoink()
+return yoink()
 ```
 
 ---

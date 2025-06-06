@@ -8,10 +8,10 @@ Yeetstack uses a combination of a generator function, a proxy and a stack to pro
 function* getUserProfile(id: number) {
    const { yeet, yoink } = Yeet({ getUser, getAddress })
 
-   yield yeet.getUser(id).user
-   yield yeet.getAddress('user').address
+   yield yeet.user.getUser(id)
+   yield yeet.address.getAddress('user')
 
-   return { ...yoink() } // returns { user, address }
+   return yoink() // returns { user, address }
 }
 
 const result = run(getUserProfile, 4)
@@ -30,28 +30,42 @@ You define your workflow using a generator function. Here, you should:
 - destructure `yeet` and `yoink` from `Yeet`, and pass it the functions you want to use.
 - define each step of the workflow like so:
    - begin each step with `yield`
-   - call your desired function as a property of `yeet`
-      - except for the initial argument, these need to be strings, as they're on the yeetstack, and not in scope
-   - define the name for the return variable as a prop on the function call (`user`, `address` in the example)
+   - reference `yeet`, and then:
+      - (optionally) access a property, which will set up a variable name for the return value of a subsequent function, and/or;
+      - call a registered function, and pass it any arguments you need to.
    - finally, use `yoink` to retrieve all stored values from the yeetstack
+
+You can access previously saved variables on the yeetstack by passing their name as a string to a function call.
+If you do not save a return value from a function, the function will still run normally.
+
+So in this example:
+
+```ts
+yield yeet.user.getUser(id)
+yield yeet.getAddress('user')
+````
+
+The return value of `getUser` is saved to `user` on the yeetstack. Then `getAddress` is called and `user` is referenced. However, in this example, the return value of address is not stored anywhere.
 
 You can easily rename `yeet` to something more domain-specific, for instance:
 
 ```ts
 const { yeet: db, yoink } = Yeet({ getUser, getAddress })
 
-yield db.getUser(id).user
+yield db.user.getUser(id)
 ```
 
 ## WTF is going on?
 
 When you initially call Yeet with your functions, it returns an object containing `yeet` and `yoink`. It also registers the functions you pass it and creates an empty array, which it uses like a stack.
 
-The `yeet` object is a proxy that behaves differently depending on whether you pass it a registered function or a property. When you pass it a registered function name, it saves it as a pending call and resolves the argument names with values on the yeetstack.
+The `yeet` object is a proxy that behaves differently depending on whether you access a property or call a function.
 
-When it receives a property and there is a pending function call, it runs the function and pushes the return value to the yeetstack, as an object where name is the prop key you gave and value is the return value.
+When you access a property, it creates a pending variable with that property name.
 
-Finally, when you call `yoink()`, everything is pulled off the stack and converted to an object that you can destructure, with their saved names as the property keys.
+When you call a function, yeet runs the function, and if there is a pending variable, saves the return value of the function to the pending variable and adds it to the yeetstack.
+
+Finally, when you call `yoink()`, everything is pulled off the stack and converted to an object containing your stored variables.
 
 ## Why?
 
@@ -72,15 +86,15 @@ I didn't like that the `yield`s weren't all lined up. So I added the yeetstack s
 
 ```ts
 // yeet has been renamed to parser
-yield parser.eat("PROPERTY_NAME").name
+yield parser.prop.eat("PROPERTY")
 yield parser.eat(":")
-yield parser.eat('VALUE').value
+yield parser.value.eat('VALUE')
 yield parser.eat(";")
 
-return { ...yoink() }
+return ...yoink()
 ```
 
-You can also pass any variable on the yeetstack to any function, but you have to pass its name as a string, since the variable isn't in scope.
+---
 
 ## License
 

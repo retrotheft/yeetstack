@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "bun:test";
+import { describe, it, expect } from "bun:test";
 import { Yeet, run } from './index';
 
 // Test utilities - your Monad implementation
@@ -38,8 +38,8 @@ describe("Yeet Stack", () => {
 
       function* getUserProfile(id: number) {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
-        yield yeet.getUser(id).user;
-        yield yeet.getAddress('user').address;
+        yield yeet.user.getUser(id)
+        yield yeet.address.getAddress('user')
         return { ...yoink() };
       }
 
@@ -60,7 +60,7 @@ describe("Yeet Stack", () => {
 
       function* testGenerator(arg1: number, arg2: string) {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
-        yield yeet.getUser(arg1).user;
+        yield yeet.user.getUser(arg1)
         return { arg1, arg2, ...yoink() };
       }
 
@@ -79,8 +79,8 @@ describe("Yeet Stack", () => {
       function* getUserProfileNoArgs() {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
         // Use a default ID since no arguments are passed
-        yield yeet.getUser(1).user;
-        yield yeet.getAddress('user').address;
+        yield yeet.user.getUser(1)
+        yield yeet.address.getAddress('user')
         return { ...yoink() };
       }
 
@@ -95,7 +95,7 @@ describe("Yeet Stack", () => {
         const { yeet, yoink } = Yeet({
           getValue: () => Monad.of("test value")
         });
-        yield yeet.getValue().value;
+        yield yeet.value.getValue();
         return { ...yoink() };
       }
 
@@ -113,8 +113,8 @@ describe("Yeet Stack", () => {
 
       function* getUserProfile(id: number) {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
-        yield yeet.getUser(id).user;
-        yield yeet.getAddress('user').address;
+        yield yeet.user.getUser(id);
+        yield yeet.address.getAddress('user');
         return { ...yoink() };
       }
 
@@ -133,8 +133,8 @@ describe("Yeet Stack", () => {
 
       function* getUserProfile(id: number) {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
-        yield yeet.getUser(id).user;
-        yield yeet.getAddress('user').address;
+        yield yeet.user.getUser(id)
+        yield yeet.address.getAddress('user')
         return { ...yoink() };
       }
 
@@ -162,8 +162,8 @@ describe("Yeet Stack", () => {
 
       function* getUserProfile(id?: number) {
         const { yeet, yoink } = Yeet({ getUser, getAddress });
-        yield yeet.getUser(id).user;
-        yield yeet.getAddress('user').address;
+        yield yeet.user.getUser(id)
+        yield yeet.address.getAddress('user')
         return { ...yoink() };
       }
 

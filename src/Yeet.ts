@@ -52,7 +52,7 @@ export function Yeet<T extends Record<string, Function>>(_fns: T) {
             return arg
          })
          const fn = fns.get(prop)!
-         if (!pending) return fn()
+         if (!pending) return fn(...resolvedArgs)
          const monad = fn(...resolvedArgs)
          pending.value = monad.extract()
          stack.push(pending)

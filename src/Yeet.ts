@@ -3,24 +3,6 @@ type StackItem = {
    value: unknown
 }
 
-// Helper type to extract return type and infer the property name from a function
-type ExtractReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-
-// Helper type to convert function arguments, adding string option for stack references
-type ConvertArgs<T extends readonly unknown[]> = {
-   [K in keyof T]: T[K] | string
-}
-
-// Create a typed yeet object that allows both function calls and arbitrary property access
-type TypedYeet<T extends Record<string, Function>> = {
-   [K in keyof T]: T[K] extends (...args: infer Args) => any
-   ? (...args: ConvertArgs<Args>) => TypedYeet<T>
-   : never
-} & {
-   // Allow any string property access for stack references and chaining
-   [key: string]: any
-}
-
 export function Yeet<T extends Record<string, Function>>(_fns: T) {
    const fns = new Map<keyof T, Function>()
    const stack: StackItem[] = []

@@ -2,7 +2,7 @@
 
 Yeetstack is an implementation of Yeet Notation - an ergonomic monadic control flow for javascript/typescript. It's the equivalent of Haskell's Do Notation or Gleam's Use.
 
-Yeetstack uses a combination of a generator function, a proxy and a stack to provide devs with a clean imperative looking syntax for any monadic control flow. Think of it async/await but for any monadic operation. It looks like this:
+Yeetstack uses a combination of a generator function, a proxy and a stack to provide devs with a clean imperative looking syntax for any monadic control flow. Think of it as async/await but for any monadic operation. It looks like this:
 
 ```ts
 function* getUserProfile(id: number) {
@@ -16,7 +16,8 @@ function* getUserProfile(id: number) {
 
 const result = run(getUserProfile, 4)
 
-// this will give you a success result, or it will short circuit, give you a failure result and include any data accumulated so far
+// this will give you a success result, or it will short circuit,
+// give you a failure result and include any data accumulated so far
 ```
 
 ## How to use it
